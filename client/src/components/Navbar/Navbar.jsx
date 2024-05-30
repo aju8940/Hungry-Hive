@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import "./Navbar.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { StoreContext } from "../../context/StoreContext";
 
 export const Navbar = ({ setShowLogin }) => {
-  const [menu, setMenu] = useState("home");
+  const [menu, setMenu] = useState("");
+  const {getCartTotal,cartItems} = useContext(StoreContext)
 
-  return (
+return (
     <div className="navbar">
       <Link to="/">
         <img
@@ -17,15 +19,14 @@ export const Navbar = ({ setShowLogin }) => {
         />
       </Link>
       <ul className="navbar-menu">
-        <Link to="/">
-          <Link
-            onClick={() => setMenu("home")}
-            className={menu === "home" ? "active" : ""}
-            to="/"
-          >
-            Home
-          </Link>
+        <Link
+          onClick={() => setMenu("home")}
+          className={menu === "home" ? "active" : ""}
+          to="/"
+        >
+          Home
         </Link>
+
         <a
           href="#explore-menu"
           onClick={() => setMenu("menu")}
@@ -44,9 +45,9 @@ export const Navbar = ({ setShowLogin }) => {
       <div className="navbar-right">
         <img src={assets.search_icon} alt="search-icon" />
         <div className="navbar-search-icon">
-          <Link to="/cart">
-            <img src={assets.basket_icon} alt="" />
-            <div className="dot"></div>
+          <Link to="/cart" onClick={() => setMenu("cart")}>
+            <img src={assets.basket_icon} alt=""/>
+            <div className={getCartTotal() ===0 ? '' : 'dot'}>{cartItems.length}</div>
           </Link>
         </div>
         <button onClick={() => setShowLogin(true)}>Sign In</button>
